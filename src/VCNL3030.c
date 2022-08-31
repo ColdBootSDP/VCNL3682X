@@ -9,7 +9,7 @@
  * 
  */
 
-#include "VCNL30X0.h"
+#include "../include/VCNL30X0.h"
 
 #include <string.h>
 #include <assert.h>
@@ -21,7 +21,7 @@ VCNL30X0* VCNLInit(VCNL30X0* const dev, const VCNLConfig* const config) {
     memcpy(&dev->config, config, sizeof(VCNLConfig));
     VCNLEnable(dev);
 
-    return config;
+    return dev;
 
 }
 
