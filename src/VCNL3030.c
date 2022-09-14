@@ -16,7 +16,9 @@
 
 VCNL30X0* VCNLInit(VCNL30X0* const dev, const VCNLConfig* const config) {
 
-    assert(config && config->read_reg && config->write_reg);
+    //assert(config && config->read_reg && config->write_reg);
+    if(config->read_reg == NULL || config->write_reg == NULL)
+        return NULL;
 
     memcpy(&dev->config, config, sizeof(VCNLConfig));
     VCNLEnable(dev);
@@ -27,7 +29,7 @@ VCNL30X0* VCNLInit(VCNL30X0* const dev, const VCNLConfig* const config) {
 
 void VCNLWrite(const VCNL30X0* const dev, const VCNLCommand command, const uint16_t value) {
 
-    assert(dev);
+    //assert(dev);
 
     const uint8_t address = (dev->config.type == VCNL3030? 0x41: 0x60);
     dev->config.write_reg(address, command, (uint8_t*)&value, 2);
@@ -36,7 +38,7 @@ void VCNLWrite(const VCNL30X0* const dev, const VCNLCommand command, const uint1
 
 void VCNLEnable(const VCNL30X0* const dev) {
 
-    assert(dev);
+    //assert(dev);
 
     static uint16_t data;
 
@@ -56,7 +58,8 @@ void VCNLDisable(const VCNL30X0* const dev) {
 
 uint16_t VCNLRead(const VCNL30X0* const dev, const VCNLCommand command) {
 
-    assert(dev);
+    if(dev == NULL)
+        return 0;
 
     static uint16_t value;
     const uint8_t address = (dev->config.type == VCNL3030? 0x41: 0x60);
@@ -65,6 +68,8 @@ uint16_t VCNLRead(const VCNL30X0* const dev, const VCNLCommand command) {
     return value;    
 
 }
+
+uint16_t VCNLReadProx(const VCNL30X0* const dev) { return VCNLRead(dev, PS_DATA); }
 
 void VCNLStart(const VCNL30X0* const dev) {
 
@@ -94,9 +99,9 @@ void VCNLDeinit(VCNL30X0* const dev) {
 
 }
 
-void VCNLISR(const VCNL30X0* const dev)  {
+void VCNLISR(const VCNL30X0* const dev, uint16_t* const proximity) {
 
-    assert(dev && dev->config.read_reg && dev->config.write_reg);
+    //assert(dev && dev->config.read_reg && dev->config.write_reg);
 
     static uint16_t int_data;
 

@@ -49,8 +49,8 @@ typedef enum VNCLTYPE {
 /// @brief The Basic Configuration, the Adapter for the Driver
 typedef struct VCNLCONFIG {
 
-    uint16_t (*read_reg)(const uint8_t s_addr, const uint8_t reg, uint8_t* const data, const uint16_t size);
-    uint16_t (*write_reg)(const uint8_t s_addr, const uint8_t reg, const uint8_t* const data, const uint16_t size);
+    uint16_t (*read_reg)(const uint8_t s_addr, const uint8_t reg, void* const data, const uint16_t size);
+    uint16_t (*write_reg)(const uint8_t s_addr, const uint8_t reg, const void* const data, const uint16_t size);
 
     VCNLType type; ///< Which type of Device we are using
 
@@ -173,11 +173,11 @@ uint16_t VCNLRead(const VCNL30X0* const dev, const VCNLCommand command);
  * \param[in] dev: Device to Read from
  * \return uint16_t: The Proximity Value
  */
-uint16_t VCNLReadProx(const VCNL30X0* const dev) { return VCNLRead(dev, PS_DATA); }
+uint16_t VCNLReadProx(const VCNL30X0* const dev);
 
 /**
  * \brief Runs the Interrupt Service Routine, updates the local flags and such
  * 
  * \param[in] dev: Device to run the Interrupt Service Routine for
  */
-void VCNLISR(const VCNL30X0* const dev);
+void VCNLISR(const VCNL30X0* const dev, uint16_t* const proximity);
