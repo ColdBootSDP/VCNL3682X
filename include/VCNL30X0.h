@@ -52,7 +52,8 @@ typedef struct VCNLCONFIG {
     uint16_t (*read_reg)(const uint8_t s_addr, const uint8_t reg, void* const data, const uint16_t size);
     uint16_t (*write_reg)(const uint8_t s_addr, const uint8_t reg, const void* const data, const uint16_t size);
 
-    VCNLType type; ///< Which type of Device we are using
+    VCNLType type;   ///< Which type of Device we are using
+    
 
 } VCNLConfig;
 
@@ -69,6 +70,7 @@ typedef struct VCNL30X0 {
 
     VCNLConfig config;  ///< The Configuration Structure 
     VCNLFlags flags;    ///< Flags having to do with the run time 
+    uint8_t address; ///> The I2C Slave Address of the Device, Init resolves this for you
 
 } VCNL30X0;
 
@@ -93,28 +95,28 @@ void VCNLDeinit(VCNL30X0* const dev);
  * 
  * \param[in] dev
  */
-void VCNLEnable(const VCNL30X0* const dev);
+uint16_t VCNLEnable(const VCNL30X0* const dev);
 
 /**
  * \brief Disables a given device
  * 
  * \param[in] dev: Device to disable
  */
-void VCNLDisable(const VCNL30X0* const dev);
+uint16_t VCNLDisable(const VCNL30X0* const dev);
 
 /**
  * \brief Starts a device proximity sensing
  * 
  * \param[in] dev: Device to start
  */
-void VCNLStart(const VCNL30X0* const dev);
+uint16_t VCNLStart(const VCNL30X0* const dev);
 
 /**
  * \brief Stops a device getting proximity 
  * 
  * \param[in] dev: Device to stop
  */
-void VCNLStop(const VCNL30X0* const dev);
+uint16_t VCNLStop(const VCNL30X0* const dev);
 
 
 /**
@@ -124,7 +126,7 @@ void VCNLStop(const VCNL30X0* const dev);
  * \param[in] command: Address/Register to Write to
  * \param[in] value: Value to write at that register/address
  */
-void VCNLWrite(const VCNL30X0* const dev, const VCNLCommand command, const uint16_t value);
+uint16_t VCNLWrite(const VCNL30X0* const dev, const VCNLCommand command, const uint16_t value);
 
 /**
  * \brief Sets the Current for the IR LED
@@ -132,7 +134,7 @@ void VCNLWrite(const VCNL30X0* const dev, const VCNLCommand command, const uint1
  * \param[in] dev: Device to set the IR Current on
  * \param[in] mA: The Current in Milliamps
  */
-void VCNLSetIRCurrent(const VCNL30X0* const dev, const uint8_t mA);
+uint16_t VCNLSetIRCurrent(const VCNL30X0* const dev, const uint8_t mA);
 
 /**
  * \brief Sets the Low Threshold for the Interrupt
@@ -140,7 +142,7 @@ void VCNLSetIRCurrent(const VCNL30X0* const dev, const uint8_t mA);
  * \param[in] dev: Device to set the Threshold for
  * \param[in] thresh: Threshold to set
  */
-void VCNLSetLowThresh(const VCNL30X0* const dev, const uint16_t thresh);
+uint16_t VCNLSetLowThresh(const VCNL30X0* const dev, const uint16_t thresh);
 
 /**
  * \brief Sets the Cancellation for the Sensor, Subtracts this value from the result for denoising
@@ -148,7 +150,7 @@ void VCNLSetLowThresh(const VCNL30X0* const dev, const uint16_t thresh);
  * \param[in] dev: Device to set the Cancellation for
  * \param[in] canc: The Value to set
  */
-void VCNLSetCancellation(const VCNL30X0* const dev, const uint16_t canc);
+uint16_t VCNLSetCancellation(const VCNL30X0* const dev, const uint16_t canc);
 
 /**
  * \brief Sets the High Threshold for the Interrupt for a device
@@ -156,7 +158,7 @@ void VCNLSetCancellation(const VCNL30X0* const dev, const uint16_t canc);
  * \param[in] dev: Device to set the Threshold of
  * \param[in] thresh: Threshold to set
  */
-void VCNLSetHighThresh(const VCNL30X0* const dev, const uint16_t thresh);
+uint16_t VCNLSetHighThresh(const VCNL30X0* const dev, const uint16_t thresh);
 
 /**
  * \brief Reads 2 Bytes from the Device from an Address
@@ -165,15 +167,15 @@ void VCNLSetHighThresh(const VCNL30X0* const dev, const uint16_t thresh);
  * \param[in] command: Address/Register to read from
  * \return uint16_t: 2 bytes from the register 
  */
-uint16_t VCNLRead(const VCNL30X0* const dev, const VCNLCommand command);
+uint16_t VCNLRead(const VCNL30X0* const dev, const VCNLCommand command, uint16_t* const data);
 
 /**
  * \brief Reads the Proximity Value from the device
  * 
  * \param[in] dev: Device to Read from
- * \return uint16_t: The Proximity Value
+ * \return uint16_t: How many bytes were read, 0 indicates a failure
  */
-uint16_t VCNLReadProx(const VCNL30X0* const dev);
+uint16_t VCNLReadProx(const VCNL30X0* const dev, uint16_t* const proximity);
 
 /**
  * \brief Runs the Interrupt Service Routine, updates the local flags and such
