@@ -17,9 +17,7 @@ VCNL30X0* VCNLInit(VCNL30X0* const dev, const VCNLConfig* const config) {
     if(config->read_reg == NULL || config->write_reg == NULL)
         return NULL;
 
-    dev->config.read_reg = config->read_reg;
-    dev->config.write_reg = config->write_reg;
-    dev->config.type = config->type;
+    dev->config = *config;
     dev->flags = (VCNLFlags){false, false};
 
     dev->address = (dev->config.type == VCNL3030? 0x41: 0x13);
@@ -64,12 +62,10 @@ uint16_t VCNLDisable(const VCNL30X0* const dev) {
 
 uint16_t VCNLRead(const VCNL30X0* const dev, const VCNLCommand command, uint16_t* const data) {
 
-    if(dev == NULL)
-        return 0;
-
     static uint8_t value[2];
     uint16_t bytesread = dev->config.read_reg(dev->address, command, value, 2);
-    *data = value[0] + value[1] << 8;
+
+    *data = (value[0]) | (((uint16_t)value[1]) << 8); // make sure we are endian independent
 
     return bytesread;    
 

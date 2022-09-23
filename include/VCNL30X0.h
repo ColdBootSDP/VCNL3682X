@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <stdlib.h>
+#include <stddef.h>
 
 
 /// @brief  The Addressable Registers accessable from I2C
@@ -94,6 +94,7 @@ void VCNLDeinit(VCNL30X0* const dev);
  * \brief Turns on the device and enables it 
  * 
  * \param[in] dev
+ * \returns uint16_t: How many bytes were written/read, should be 2
  */
 uint16_t VCNLEnable(const VCNL30X0* const dev);
 
@@ -101,6 +102,7 @@ uint16_t VCNLEnable(const VCNL30X0* const dev);
  * \brief Disables a given device
  * 
  * \param[in] dev: Device to disable
+ * \returns uint16_t: How many bytes were written/read, should be 2
  */
 uint16_t VCNLDisable(const VCNL30X0* const dev);
 
@@ -108,6 +110,7 @@ uint16_t VCNLDisable(const VCNL30X0* const dev);
  * \brief Starts a device proximity sensing
  * 
  * \param[in] dev: Device to start
+ * \returns uint16_t: How many bytes were written/read, should be 2
  */
 uint16_t VCNLStart(const VCNL30X0* const dev);
 
@@ -115,6 +118,7 @@ uint16_t VCNLStart(const VCNL30X0* const dev);
  * \brief Stops a device getting proximity 
  * 
  * \param[in] dev: Device to stop
+ * \returns uint16_t: How many bytes were written/read, should be 2
  */
 uint16_t VCNLStop(const VCNL30X0* const dev);
 
@@ -125,6 +129,7 @@ uint16_t VCNLStop(const VCNL30X0* const dev);
  * \param[in] dev: Device to Write to
  * \param[in] command: Address/Register to Write to
  * \param[in] value: Value to write at that register/address
+ * \returns uint16_t: How many bytes were written/read, should be 2
  */
 uint16_t VCNLWrite(const VCNL30X0* const dev, const VCNLCommand command, const uint16_t value);
 
@@ -133,6 +138,7 @@ uint16_t VCNLWrite(const VCNL30X0* const dev, const VCNLCommand command, const u
  * 
  * \param[in] dev: Device to set the IR Current on
  * \param[in] mA: The Current in Milliamps
+ * \return uint16_t: How many bytes were written/read, should be 2
  */
 uint16_t VCNLSetIRCurrent(const VCNL30X0* const dev, const uint8_t mA);
 
@@ -141,6 +147,7 @@ uint16_t VCNLSetIRCurrent(const VCNL30X0* const dev, const uint8_t mA);
  * 
  * \param[in] dev: Device to set the Threshold for
  * \param[in] thresh: Threshold to set
+ * \returns uint16_t: How many bytes were written/read, should be 2
  */
 uint16_t VCNLSetLowThresh(const VCNL30X0* const dev, const uint16_t thresh);
 
@@ -149,6 +156,7 @@ uint16_t VCNLSetLowThresh(const VCNL30X0* const dev, const uint16_t thresh);
  * 
  * \param[in] dev: Device to set the Cancellation for
  * \param[in] canc: The Value to set
+ * \returns uint16_t: How many bytes were read/written, should be 2
  */
 uint16_t VCNLSetCancellation(const VCNL30X0* const dev, const uint16_t canc);
 
@@ -157,6 +165,7 @@ uint16_t VCNLSetCancellation(const VCNL30X0* const dev, const uint16_t canc);
  * 
  * \param[in] dev: Device to set the Threshold of
  * \param[in] thresh: Threshold to set
+ * \returns uint16_t: How Many Bytes were written and read, should be 2
  */
 uint16_t VCNLSetHighThresh(const VCNL30X0* const dev, const uint16_t thresh);
 
