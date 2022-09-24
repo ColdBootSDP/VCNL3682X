@@ -110,8 +110,6 @@ void VCNLDeinit(VCNL30X0* const dev) {
 
 void VCNLISR(const VCNL30X0* const dev, uint16_t* const proximity) {
 
-    //assert(dev && dev->config.read_reg && dev->config.write_reg);
-
     static uint16_t int_data;
 
     VCNLRead(dev, INT_FLAG, &int_data);
