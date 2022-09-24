@@ -20,7 +20,7 @@ VCNL30X0* VCNLInit(VCNL30X0* const dev, const VCNLConfig* const config) {
     dev->config = *config;
     dev->flags = (VCNLFlags){false, false};
 
-    dev->address = (dev->config.type == VCNL3030? 0x41: 0x13);
+    dev->address = 0x41; //(config->type == VCNL3030? 0x41: 0x13);
 
     return dev;
 
@@ -28,9 +28,9 @@ VCNL30X0* VCNLInit(VCNL30X0* const dev, const VCNLConfig* const config) {
 
 uint16_t VCNLWrite(const VCNL30X0* const dev, const VCNLCommand command, const uint16_t value) {
 
-    uint8_t data[2] = { (uint8_t)(value & 0xff), (uint8_t)(value >> 8) };
+    //uint8_t data[2] = { (uint8_t)(value & 0xff), (uint8_t)(value >> 8) };
 
-    return dev->config.write_reg(dev->address, command, data, 2);
+    return dev->config.write_reg(dev->address, command, &value, 2);
 
 }
 
